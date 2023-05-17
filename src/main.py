@@ -1,7 +1,7 @@
 # Import
 from time import sleep
 from datetime import datetime
-from ade import load_user
+from ade import init_browser, load_user, clear_browser
 from database import get_users, update_courses
 from events import fetch_events
 
@@ -17,14 +17,18 @@ while True:
     # We refresh everything
     last_refresh = datetime.now()
     users = get_users()
+    browser = init_browser()
     for user in users:
         id = user[0]
         first_name = user[1]
         last_name = user[2]
         try:
-            url = load_user(last_name)
-            events = fetch_events(url)
-            update_courses(events, id)
+            url = load_user(browser, last_name)
+            if url is not None:
+                events = fetch_events(url)
+                update_courses(events, id)
         except:
             pass # Skip in case of error
-        sleep(1)
+    
+    # We clear the browser
+    clear_browser(browser)
