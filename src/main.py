@@ -19,9 +19,12 @@ while True:
     users = get_users()
     for user in users:
         id = user[0]
-        email = user[1]
-        first_name = user[3]
-        last_name = user[4]
-        url = load_user(last_name)
-        events = fetch_events(url)
-        update_courses(events, id)
+        first_name = user[1]
+        last_name = user[2]
+        try:
+            url = load_user(last_name)
+            events = fetch_events(url)
+            update_courses(events, id)
+        except:
+            pass # Skip in case of error
+        sleep(1)

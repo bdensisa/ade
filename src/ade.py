@@ -7,11 +7,10 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.expected_conditions import visibility_of_element_located
 
-options = webdriver.FirefoxOptions()
-options.headless = True # Allows to run without a window, useful for server
-
 def load_user(name):
-    # Sleep to avoid spamming
+    # Create browser
+    options = webdriver.FirefoxOptions()
+    options.headless = True # Allows to run without a window, useful for server
     browser = webdriver.Firefox(options=options)
 
     # Load page

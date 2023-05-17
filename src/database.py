@@ -22,8 +22,8 @@ def transform_description(description):
 
 def get_users():
     mycursor = mydb.cursor()
-    mycursor.execute("SELECT * FROM Users")
-    return mycursor
+    mycursor.execute("SELECT id, first_name, last_name FROM Users")
+    return mycursor.fetchall()
 
 def update_courses(events, user_id):
     # First delete courses that are not longer in the calendar
