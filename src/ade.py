@@ -25,9 +25,6 @@ def clear_browser(browser):
 
 # Function to get the URL of a user
 def load_user(browser, name):
-    # Sleep to let the page load
-    sleep(1)
-
     # Login if needed
     if browser.current_url.startswith('https://cas.uha.fr/cas/login'):
         # Read username and password from json file
