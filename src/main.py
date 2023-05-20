@@ -22,13 +22,10 @@ while True:
         id = user[0]
         first_name = user[1]
         last_name = user[2]
-        try:
-            url = load_user(browser, last_name)
-            if url is not None:
-                events = fetch_events(url)
-                update_courses(events, id)
-        except:
-            pass # Skip in case of error
+        url = load_user(browser, last_name, first_name)
+        if url is not None:
+            events = fetch_events(url)
+            update_courses(events, id)
     
     # We clear the browser
     clear_browser(browser)

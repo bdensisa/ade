@@ -23,8 +23,16 @@ def clear_browser(browser):
     browser.quit()
     pass
 
+# Remove accents from a string
+def remove_accents(string):
+    accents = {'a': ['à', 'â', 'ä'], 'e': ['é', 'è', 'ê', 'ë'], 'i': ['î', 'ï'], 'o': ['ô', 'ö'], 'u': ['ù', 'û', 'ü'], 'c': ['ç']}
+    for letter in accents:
+        for accent in accents[letter]:
+            string = string.replace(accent, letter)
+    return string
+
 # Function to get the URL of a user
-def load_user(browser, name):
+def load_user(browser, last_name, first_name):
     # Login if needed
     if browser.current_url.startswith('https://cas.uha.fr/cas/login'):
         # Read username and password from json file
@@ -35,24 +43,46 @@ def load_user(browser, name):
         browser.find_element('id', 'password').submit()
         file.close()
 
+    # Try with "last_name first_name" format (used by TF/Meca)
+    urlText = try_with_name(browser, last_name + ' ' + first_name)
+    
+    # Try with "last_name\tfirst_name" format without accents (used by IR/ASE)
+    if urlText is None:
+        urlText = try_with_name(browser, remove_accents(last_name) + '\t' + remove_accents(first_name))
+    
+    # Try with "last_name\tfirst_name" format
+    if urlText is None:
+        urlText = try_with_name(browser, last_name + '\t' + first_name)
+
+    # Try with "last_name first_name" format without accents
+    if urlText is None:
+        urlText = try_with_name(browser, remove_accents(last_name) + ' ' + remove_accents(first_name))
+
+    # If not found, try with only last name (If full name is not matching the one in ADE)
+    if urlText is None:
+        urlText = try_with_name(browser, last_name)
+    
+    return urlText
+
+def try_with_name(browser, name):
     # Grab field and enter name
     WebDriverWait(browser, 5).until(visibility_of_element_located((By.ID, 'x-auto-33-input')))
     browser.find_element('id', 'x-auto-33-input').send_keys(name)
     browser.find_element('id', 'x-auto-33-input').send_keys(Keys.ENTER)
     urlText = None # Default value if user not found
-    sleep(3)
+    sleep(1)
     try:
         # Check that planning is loaded (and by the way that user exists)
-        WebDriverWait(browser, 5).until(visibility_of_element_located((By.ID, 'Planning')))
+        WebDriverWait(browser, 3).until(visibility_of_element_located((By.ID, 'Planning')))
         # Click on export
-        WebDriverWait(browser, 5).until(visibility_of_element_located((By.XPATH, "//img[contains(@style, '" + export_icon + "')]"))).click()
+        WebDriverWait(browser, 3).until(visibility_of_element_located((By.XPATH, "//img[contains(@style, '" + export_icon + "')]"))).click()
         # Click on Generate URL
-        WebDriverWait(browser, 5).until(visibility_of_element_located((By.XPATH, "//button[contains(text(), 'URL')]"))).click()
+        WebDriverWait(browser, 3).until(visibility_of_element_located((By.XPATH, "//button[contains(text(), 'URL')]"))).click()
         # Get generated URL
-        urlText = WebDriverWait(browser, 5).until(visibility_of_element_located((By.ID, 'logdetail'))).text
+        urlText = WebDriverWait(browser, 3).until(visibility_of_element_located((By.ID, 'logdetail'))).text
         # Close popups
-        WebDriverWait(browser, 5).until(visibility_of_element_located((By.XPATH, "//button[contains(text(), 'Close') or contains(text(), 'Fermer')]"))).click()
-        WebDriverWait(browser, 5).until(visibility_of_element_located((By.XPATH, "//button[contains(text(), 'Cancel') or contains(text(), 'Annuler')]"))).click()
+        WebDriverWait(browser, 3).until(visibility_of_element_located((By.XPATH, "//button[contains(text(), 'Close') or contains(text(), 'Fermer')]"))).click()
+        WebDriverWait(browser, 3).until(visibility_of_element_located((By.XPATH, "//button[contains(text(), 'Cancel') or contains(text(), 'Annuler')]"))).click()
     except:
         # User not found
         pass
@@ -60,4 +90,5 @@ def load_user(browser, name):
     # Clear name
     for _ in range(len(name)):
         browser.find_element('id', 'x-auto-33-input').send_keys(Keys.BACKSPACE)
+    
     return urlText
