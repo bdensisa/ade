@@ -42,25 +42,33 @@ def load_user(browser, last_name, first_name):
         browser.find_element('id', 'password').send_keys(credentials['password'])
         browser.find_element('id', 'password').submit()
         file.close()
+    
+    # Name variants
+    last_name_without_accent = remove_accents(last_name)
+    first_name_without_accent = remove_accents(first_name)
 
-    # Try with "last_name first_name" format (used by TF/Meca)
+    # Try with "last_name first_name" format (used by TF/Meca, as of 2023)
     urlText = try_with_name(browser, last_name + ' ' + first_name)
     
-    # Try with "last_name\tfirst_name" format without accents (used by IR/ASE)
+    # Try with "last_name\tfirst_name" format without accents (used by IR/ASE, as of 2023)
     if urlText is None:
-        urlText = try_with_name(browser, remove_accents(last_name) + '\t' + remove_accents(first_name))
+        urlText = try_with_name(browser, last_name_without_accent + '\t' + first_name_without_accent)
     
     # Try with "last_name first_name" format without accents
-    if urlText is None:
-        urlText = try_with_name(browser, remove_accents(last_name) + ' ' + remove_accents(first_name))
+    if urlText is None and (last_name_without_accent != last_name or first_name_without_accent != first_name):
+        urlText = try_with_name(browser, last_name_without_accent + ' ' + first_name_without_accent)
 
     # Try with "last_name\tfirst_name" format
-    if urlText is None:
+    if urlText is None and (last_name_without_accent != last_name or first_name_without_accent != first_name):
         urlText = try_with_name(browser, last_name + '\t' + first_name)
 
-    # If not found, try with only last name (If full name is not matching the one in ADE)
+    # Try with only last name (If full name is not matching the one in ADE)
     if urlText is None:
         urlText = try_with_name(browser, last_name)
+    
+    # Try with only last name without accents
+    if last_name_without_accent != last_name and urlText is None:
+        urlText = try_with_name(browser, last_name_without_accent)
     
     return urlText
 
