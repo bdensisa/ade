@@ -50,13 +50,13 @@ def load_user(browser, last_name, first_name):
     if urlText is None:
         urlText = try_with_name(browser, remove_accents(last_name) + '\t' + remove_accents(first_name))
     
-    # Try with "last_name\tfirst_name" format
-    if urlText is None:
-        urlText = try_with_name(browser, last_name + '\t' + first_name)
-
     # Try with "last_name first_name" format without accents
     if urlText is None:
         urlText = try_with_name(browser, remove_accents(last_name) + ' ' + remove_accents(first_name))
+
+    # Try with "last_name\tfirst_name" format
+    if urlText is None:
+        urlText = try_with_name(browser, last_name + '\t' + first_name)
 
     # If not found, try with only last name (If full name is not matching the one in ADE)
     if urlText is None:
