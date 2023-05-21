@@ -16,16 +16,17 @@ while True:
 
     # We refresh everything
     last_refresh = datetime.now()
-    users = get_users()
-    browser = init_browser()
-    for user in users:
-        id = user[0]
-        first_name = user[1]
-        last_name = user[2]
-        url = load_user(browser, last_name, first_name)
-        if url is not None:
-            events = fetch_events(url)
-            update_courses(events, id)
-    
-    # We clear the browser
-    clear_browser(browser)
+    try:
+        users = get_users()
+        browser = init_browser()
+        for user in users:
+            id = user[0]
+            first_name = user[1]
+            last_name = user[2]
+            url = load_user(browser, last_name, first_name)
+            if url is not None:
+                events = fetch_events(url)
+                update_courses(events, id)
+        clear_browser(browser)
+    except Exception as e:
+        print(e)
