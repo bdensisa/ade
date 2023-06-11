@@ -1,11 +1,11 @@
 # BdeEnsisaAde
 
-[![License](https://img.shields.io/github/license/NathanFallet/BdeEnsisaAde)](LICENSE)
-[![Issues](https://img.shields.io/github/issues/NathanFallet/BdeEnsisaAde)]()
-[![Pull Requests](https://img.shields.io/github/issues-pr/NathanFallet/BdeEnsisaAde)]()
-[![Code Size](https://img.shields.io/github/languages/code-size/NathanFallet/BdeEnsisaAde)]()
-[![CodeFactor](https://www.codefactor.io/repository/github/NathanFallet/BdeEnsisaAde/badge)](https://www.codefactor.io/repository/github/NathanFallet/BdeEnsisaAde)
-[![Open Source Helpers](https://www.codetriage.com/nathanfallet/bdeensisaade/badges/users.svg)](https://www.codetriage.com/nathanfallet/bdeensisaade)
+[![License](https://img.shields.io/github/license/bdensisa/ade)](LICENSE)
+[![Issues](https://img.shields.io/github/issues/bdensisa/ade)]()
+[![Pull Requests](https://img.shields.io/github/issues-pr/bdensisa/ade)]()
+[![Code Size](https://img.shields.io/github/languages/code-size/bdensisa/ade)]()
+[![CodeFactor](https://www.codefactor.io/repository/github/bdensisa/ade/badge)](https://www.codefactor.io/repository/github/bdensisa/ade)
+[![Open Source Helpers](https://www.codetriage.com/bdensisa/ade/badges/users.svg)](https://www.codetriage.com/bdensisa/ade)
 
 Scrapper d'ADE pour afficher les emplois du temps dans l'application du BDE.
 
